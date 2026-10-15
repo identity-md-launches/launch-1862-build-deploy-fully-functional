@@ -669,8 +669,8 @@ function Explore({ state, category }: { state: State; category?: string }) {
     <>
       <div className="page-heading">
         <div>
-          <h1 tabIndex={-1}>Find your bigger picture.</h1>
-          <p>One investment. A thoughtfully composed basket of crypto.</p>
+          <h1 tabIndex={-1}>Explore crypto vaults</h1>
+          <p>Compare example returns and asset allocations.</p>
         </div>
         <a href="#/create" className="button secondary">
           <Icon name="plus" size={18} />
@@ -1160,8 +1160,8 @@ function Portfolio({
     <>
       <div className="page-heading">
         <div>
-          <h1 tabIndex={-1}>Your portfolio, in perspective.</h1>
-          <p>A place to practice. Every dollar here is virtual.</p>
+          <h1 tabIndex={-1}>Your demo portfolio</h1>
+          <p>Track virtual holdings, gains, and losses.</p>
         </div>
         <button
           className="button primary"
@@ -1433,7 +1433,7 @@ function Creator({
     if (name.trim().length < 3 || name.trim().length > 50) {
       setNameError(true);
       setError("Give your vault a name between 3 and 50 characters.");
-      nameRef.current?.focus();
+      requestAnimationFrame(() => nameRef.current?.focus());
       return;
     }
     if (
@@ -1447,14 +1447,14 @@ function Creator({
       setError(
         "A vault with this name already exists. Choose a different name.",
       );
-      nameRef.current?.focus();
+      requestAnimationFrame(() => nameRef.current?.focus());
       return;
     }
     const invalid = validateAllocations(allocations);
     if (invalid) {
       setNameError(false);
       setError(invalid);
-      allocationRef.current?.focus();
+      requestAnimationFrame(() => allocationRef.current?.focus());
       return;
     }
     const vault: Vault = {
@@ -1502,12 +1502,12 @@ function Creator({
               ? "Refine your official vault."
               : official
                 ? "Create an official vault."
-                : "Build your own bigger picture."}
+                : "Create a crypto vault"}
           </h1>
           <p>
             {official
               ? "Admin demo · Changes apply only in this browser."
-              : "Choose your assets. Set your balance. Make it yours."}
+              : "Choose assets and set allocations totaling 100%."}
           </p>
         </div>
       </div>
@@ -1531,6 +1531,11 @@ function Creator({
                 aria-invalid={nameError}
                 aria-describedby={nameError ? "creator-error" : undefined}
               />
+              {error && nameError && (
+                <p className="error" id="creator-error" role="alert">
+                  {error}
+                </p>
+              )}
             </div>
             <div className="field">
               <label htmlFor="vault-description">
@@ -1574,6 +1579,11 @@ function Creator({
             <p className="muted">
               Choose at least two assets. Allocations must total 100%.
             </p>
+            {error && !nameError && (
+              <p className="error" id="creator-error" role="alert">
+                {error}
+              </p>
+            )}
             <div className="allocation-editor">
               {allocations.map((a, i) => (
                 <div className="asset-editor" key={a.asset}>
@@ -1702,11 +1712,6 @@ function Creator({
                 : "Publish to your local community gallery. This demo does not share vaults with other visitors."}
             </p>
           </div>
-          {error && (
-            <p className="error" id="creator-error" role="alert">
-              {error}
-            </p>
-          )}
           <button type="submit" className="button primary full">
             {existing
               ? "Save official vault"

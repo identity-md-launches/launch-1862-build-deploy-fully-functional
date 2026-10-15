@@ -57,11 +57,28 @@ Actual checks completed on the production export:
 | TypeScript strict typecheck | Passed |
 | Model tests | 12 passed |
 | Chromium interaction checks | 16 passed, 0 failed |
+| Revision regression checks | 40 passed, 0 failed; 50-character names, field errors, and task copy at 320, 390, 1440px |
 | Automated accessibility | 0 violations on six routes and the investment dialog, for the selected WCAG A/AA rules |
 | Responsive overflow | Passed on six routes at 320, 390, 768, 1024, 1440px |
 | Pinned taste@1 probe | 16/16 passed |
 | 390px first screen | Product, primary action, and featured vault visible |
 | Native WebKit/Safari | Not performed: WebKit could not launch with the available browser runtime |
+
+The revision reproduced all three reviewer findings before changing the app. Full vault names now wrap inside cards, holdings, and transaction dialogs; creator errors stay beside the focused name/allocation input; Explore, Create, and Portfolio use task-specific headings. At 390px the investment and success dialogs now have equal client/scroll widths of 350px, and the portfolio and renamed homepage remain 390px wide. The palette, type scale, spacing, and investment model are preserved.
+
+`tests/revision.mjs` exercises the reported cases through the UI and checks complete text bounds, surface/page overflow, focus, error visibility, and accessible error associations. It saves disposable measurements and screenshots under `test/scratch/revision-after/`. `--baseline` records the same checks under `test/scratch/revision-before/` for comparison; it does not change their expectations. The existing browser suite now waits for Explore navigation to finish before counting cards in the disabled-storage case.
+
+For this revision, dependencies were installed with `npm ci` in `/tmp/cryptovault-revision-tools`, and the supplied Chromium runtime was used. The production build, strict typecheck, and 12 model tests passed using that toolchain. The browser suites ran with:
+
+```sh
+npm install --prefix /tmp/cryptovault-revision-tools --no-save --package-lock=false @axe-core/playwright
+IMD_PLAYWRIGHT=/opt/imd-tools/playwright-mcp/node_modules/playwright/index.mjs \
+PLAYWRIGHT_BROWSERS_PATH=/opt/imd-tools/ms-playwright \
+  node tests/revision.mjs
+IMD_PLAYWRIGHT=/opt/imd-tools/playwright-mcp/node_modules/playwright/index.mjs \
+PLAYWRIGHT_BROWSERS_PATH=/opt/imd-tools/ms-playwright \
+  node tests/browser.mjs /tmp/cryptovault-revision-tools
+```
 
 Browser tests are in `tests/browser.mjs`; they serve `dist/` at a subpath and close their server/browser on completion. Optional test tooling stays outside the repository:
 
@@ -76,8 +93,8 @@ PLAYWRIGHT_BROWSERS_PATH=/tmp/cryptovault-test-browsers \
 The pinned design probe was run with an explicitly supplied Playwright module and browser directory:
 
 ```sh
-IMD_PLAYWRIGHT=/tmp/cryptovault-toolchain/node_modules/playwright/index.mjs \
-PLAYWRIGHT_BROWSERS_PATH=/tmp/cryptovault-browsers \
+IMD_PLAYWRIGHT=/opt/imd-tools/playwright-mcp/node_modules/playwright/index.mjs \
+PLAYWRIGHT_BROWSERS_PATH=/opt/imd-tools/ms-playwright \
   node .imd/reads/skills/design-critic/scripts/taste.mjs --out test/scratch/taste --offline
 ```
 

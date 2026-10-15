@@ -1,10 +1,13 @@
 import { createRequire } from "node:module";
 import { resolve, extname } from "node:path";
+import { pathToFileURL } from "node:url";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import assert from "node:assert/strict";
 const require = createRequire(resolve(process.argv[2] || ".", "package.json"));
-const { chromium, webkit } = require("playwright");
+const { chromium, webkit } = process.env.IMD_PLAYWRIGHT
+  ? await import(pathToFileURL(process.env.IMD_PLAYWRIGHT).href)
+  : require("playwright");
 const { default: AxeBuilder } = require("@axe-core/playwright");
 const output = "test/scratch/browser-check";
 await mkdir(output, { recursive: true });
@@ -517,6 +520,7 @@ try {
         /storage|visit only/,
       );
       await temp.locator(".hero .button.primary").click();
+      await temp.getByRole("heading", { name: "Explore crypto vaults", exact: true }).waitFor();
       assert.equal(await temp.locator(".vault-card").count(), 6);
       await temp.close();
     },

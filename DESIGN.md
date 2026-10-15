@@ -35,7 +35,7 @@ Inter is self-hosted in `public/fonts/inter-latin.woff2`, with Arial and sans-se
 
 The six-size scale is `--text-xs` 12px, `--text-sm` 14px, `--text-base` 16px, `--text-lg` 20px, `--text-xl` 32px, and `--text-display` 56px, all expressed in rem at the 16px default root size. The display size belongs to the desktop homepage headline; it becomes 32px below 1240px. Task-page titles use 32px, section headings 20px, and labels 12–14px. Mobile inputs remain at least 16px.
 
-Body line height is 1.5; descriptions use 1.6–1.8 where appropriate. Heading line height is 1.2, with the display headline at 1.08. Display tracking is −0.06em, page titles −0.04em, and smaller headings −0.025em or −0.015em. Headings balance their lines; prose uses pretty wrapping. Monetary values use tabular numerals. Critical values are allowed to wrap instead of being ellipsized.
+Body line height is 1.5; descriptions use 1.6–1.8 where appropriate. Heading line height is 1.2, with the display headline at 1.08. Display tracking is −0.06em, page titles −0.04em, and smaller headings −0.025em or −0.015em. Headings balance their lines; prose uses pretty wrapping. Monetary values use tabular numerals. Critical values are allowed to wrap instead of being ellipsized. The featured vault title, card links, holding links, transaction names, and confirmation paragraphs use `overflow-wrap: anywhere` so the full accepted 50-character name stays readable, including an unbroken name.
 
 ## Layout
 
@@ -47,7 +47,7 @@ Spacing uses recurring 4, 8, 12, 16, 20, 24, 28, 32, and 42px steps. Inline gutt
 - At 720px: the sidebar is replaced by a labeled menu control. The menu appears in normal flow. Main gutters are 20px, portfolio statistics use two columns, and headings/actions wrap. The top bar can grow when text is enlarged.
 - At 550px: vault cards use one column. At 359px: gutters are 16px and small-screen forms stack further.
 
-Grid children that contain controls use `min-width: 0`. The sidebar can scroll on short windows. Allocations wrap under text enlargement. Responsive overflow checks passed on six routes at 320, 390, 768, 1024, and 1440px. The homepage was also checked with 200% CSS text enlargement. This was not a browser-native zoom test.
+Grid children that contain controls use `min-width: 0`. Text containers inside `.row` and direct holding-grid children also use `min-width: 0` so long vault names can shrink and wrap. The sidebar can scroll on short windows. Allocations wrap under text enlargement. Responsive overflow checks passed on six routes at 320, 390, 768, 1024, and 1440px. Revision checks also verified 50 uppercase W characters in community and official vaults at 320, 390, and 1440px, including both transaction dialog states. The homepage was also checked with 200% CSS text enlargement. This was not a browser-native zoom test.
 
 ## Elevation & Depth
 
@@ -71,7 +71,7 @@ Reusable components live in `src/components.tsx`:
 Patterns in `src/App.tsx` include:
 
 - `.button.primary` for the principal action, `.secondary` for alternatives, `.ghost` for low-emphasis actions, and `.danger` for resetting local data. Buttons have at least 44px height. Icon buttons have accessible names.
-- `.field`, native labels, inputs, selects, and textareas. Validation stays beside the affected form, sets `aria-invalid`, announces an error, and focuses the relevant input.
+- `.field`, native labels, inputs, selects, and textareas. Creator name errors appear immediately below the name input; allocation errors appear immediately above the allocation editor. One conditional `#creator-error` retains `role="alert"` and the fields' `aria-describedby` relationships. Failed submission focuses the relevant input on the next animation frame, after the error changes the layout. The preview contains the submit action and no detached error message.
 - Vault category buttons expose `aria-pressed`; period controls do the same. Navigation uses real hash links and `aria-current`.
 - Local transaction dialogs move from editable form to success. Operations are synchronous, so there is no fabricated loading state. Disabled withdrawals and simulations explain prerequisites in surrounding text.
 - The creator supports numeric and slider allocations, adding/removing assets, equal splitting, a live total, and an allocation preview.
@@ -81,6 +81,7 @@ Focus uses a 2px lime outline with 4px offset. The primary action’s visible ke
 ## Do’s and don’ts
 
 - Start a new task page with `.page-heading`, then reuse `.panel`, `.section-heading`, and the existing field/button patterns.
+- Name the task in the heading: Explore uses “Explore crypto vaults,” the community creator uses “Create a crypto vault,” and the portfolio uses “Your demo portfolio.” Their supporting lines explain comparison, 100% allocations, and virtual holdings respectively.
 - Reuse the six-size scale and semantic color tokens. Keep a single main action visually prominent.
 - Keep demo labels adjacent to balances, returns, and transaction confirmations. Preserve the browser-local publishing/admin explanation.
 - Use actual anchors for routes and actual buttons for actions. Keep all money and allocation validation in `src/model.ts`.

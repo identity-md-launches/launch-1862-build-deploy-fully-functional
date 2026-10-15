@@ -562,6 +562,7 @@ footer .text-button {
   height: 42px;
 }
 .featured-title {
+  overflow-wrap: anywhere;
   font-size: var(--text-sm);
   font-weight: 600;
   display: flex;
@@ -709,6 +710,7 @@ footer .text-button {
   font-size: var(--text-lg);
 }
 .vault-card h3 a {
+  overflow-wrap: anywhere;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -1210,6 +1212,9 @@ footer .text-button {
   padding: 20px 0;
   border-block-end: 1px solid var(--border);
 }
+.holding-row > div {
+  min-width: 0;
+}
 .holding-row > div > strong,
 .holding-row > div > span {
   display: block;
@@ -1220,6 +1225,7 @@ footer .text-button {
   font-variant-numeric: tabular-nums;
 }
 .holding-row a {
+  overflow-wrap: anywhere;
   font-size: var(--text-sm);
 }
 .holding-row .row > div > span {
@@ -1428,8 +1434,8 @@ footer .text-button {
   font-size: var(--text-sm);
   line-height: 1.6;
 }
-.creator-preview .error {
-  margin-block: 16px;
+.assets-panel > .error {
+  margin-block-start: 12px;
 }
 .admin-stats {
   grid-template-columns: repeat(3, 1fr);
@@ -1494,6 +1500,7 @@ dialog::backdrop {
   padding-block: 4px 10px;
 }
 .transaction-vault strong {
+  overflow-wrap: anywhere;
   font-size: var(--text-sm);
 }
 .transaction-vault .small-text {
@@ -1563,6 +1570,8 @@ dialog::backdrop {
   font-size: var(--text-lg);
 }
 .transaction-success p {
+  overflow-wrap: anywhere;
+  min-width: 0;
   color: var(--muted);
   font-size: var(--text-sm);
 }
@@ -1948,7 +1957,6 @@ dialog > .button-row {
     grid-column: 2;
   }
   .creator-preview .notice,
-  .creator-preview .error,
   .creator-preview .button,
   .creator-preview .cancel-link {
     grid-column: 1/-1;
